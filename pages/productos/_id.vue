@@ -1,6 +1,6 @@
 <template>
   <b-form @submit.prevent="guardarProducto">
-    <h1 style="margin-left: 40%">Registrar Producto</h1>
+    <h1 style="margin-left: 40%">Registrar Producto {{producto}}</h1>
     <div class="row">
       <div class="col-sm-12">
         <b-form-group label="Imagen" label-for="imagen">
@@ -39,7 +39,19 @@
 import {db, storage} from '../../services/firebase';
 
 export default{
-  
+
+        asyncData({params}){
+
+        return db.collection('productos').doc(params.id).get().then(res=>{
+            return{
+                producto: res.data(),
+               
+                id: params.id,
+                 nombre: res.data().nombre
+            }
+            
+        })
+    },
   data(){
     return{
       form: {
@@ -74,3 +86,4 @@ export default{
 
 <style>
 </style>
+

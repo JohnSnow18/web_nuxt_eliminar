@@ -7,7 +7,7 @@
         <b-table id= "productos" striped hover :fields="fields" :items="items" :current-page="currentPage" :per-page="perPage">
 
           <template slot="acciones" slot-scope="data">
-            <b-button variant="success">
+            <b-button variant="success" :href="`/productos/${data.item.id}`">
               Editar
             </b-button>
 
@@ -15,6 +15,10 @@
               Eliminar
             </b-button>
            
+          </template>
+
+          <template slot="imagen" slot-scope="data">
+            <b-img width= "120" :src="data.item.image"></b-img>
           </template>
         </b-table>
 
@@ -46,7 +50,7 @@ export default {
     return db.collection('productos')/* .orderBy('nombre') *//* .limit(perPage) */.get().then(async res =>{
       let items = []
      console.log(res)
-    /res.forEach(value =>{
+    res.forEach(value =>{
        items.push({
         id: value.id,
         ...value.data()
@@ -74,7 +78,10 @@ export default {
   data() {
     return {
       fields: [
-        "imagen",
+        
+        {  key: "imagen",
+           sortable: false
+        },
         {
           key: "nombre",
           sortable: true
